@@ -4,7 +4,7 @@ ini_set('display_errors', "On");
 
 $name = isset($_POST['name']) ? $_POST['name'] : "";
 $region = isset($_POST['region']) ? $_POST['region'] : "";
-$continent = isset($_POST['continent']) ? $_POST['cotinent'] : ""; 
+$continent = isset($_POST['Continent']) ? $_POST['Continent'] : ""; 
 $indepyear_min = isset($_POST['indepyear_min']) ? $_POST['indepyear_min'] : 0;
 $indepyear_max = isset($_POST['indepyear_max']) ? $_POST['indepyear_max'] : 0;
 $surfacearea_min = isset($_POST['surfacearea_min']) ? $_POST['surfacearea_min'] : "";
@@ -14,7 +14,7 @@ $submit = isset($_POST['submit']) ? $_POST['submit'] : "";
 try {
 
 // MySQLiコネクタを生成
-$link = mysqli_connect("localhost", "root", "", "world");
+$link = mysqli_connect("db", "root", "root", "world");
 
 // DBコネクションを確立
 if(!$link) {
@@ -41,6 +41,14 @@ if($submit === "search") {
         $wheres[] = "IndepYear >= {$indepyear_min}";
     } else if(!empty($indepyear_max)) {
         $wheres[] = "IndepYear <= {$indepyear_max}";
+    }
+
+    if(!empty($surfacearea_min) && !empty($surfacearea_max)) {
+        $wheres[] = "SurfaceArea BETWEEN {$surfacearea_min} AND {$surfacearea_max}";
+    } else if(!empty($surfacearea_min)) {
+        $wheres[] = "SurfaceArea >= {$surfacearear_min}";
+    } else if(!empty($surfacearea_max)) {
+        $wheres[] = "SurfaceArea <= {$surfacearea_max}";
     }
 
     if(!empty($wheres)) {
@@ -85,16 +93,13 @@ mysqli_close($link);
             <label for="inputEmail3" class="col-sm-2 col-form-label">Continent</label>
             <div class="col-sm-10">
                 <select class="form-select " id="Continent" name="Continent">
-                    <option <?php if( $continent === 'Asia' ) echo 'Asia'; ?> value="Asia">Asia</option>
-                    <option <?php if( $continent === 'Europe' ) echo 'Europe'; ?> value="Europe">Europe</option>
-                    <option <?php if( $continent === 'North America' ) echo 'North America'; ?> value="North America">
-                        North America</option>
-                    <option <?php if( $continent === 'Africa' ) echo 'Africa'; ?> value="Africa">Africa</option>
-                    <option <?php if( $continent === 'Oceania' ) echo 'Oceania'; ?> value="Oceania">Oceania</option>
-                    <option <?php if( $continent === 'Anterctica' ) echo 'Anterctica'; ?> value="Anterctica">Anterctica
-                    </option>
-                    <option <?php if( $continent === 'South America' ) echo 'selected'; ?> value="South America">South
-                        America</option>
+                    <option <?php if( $continent === 'Asia' ) echo 'selected'; ?> value="Asia">Asia</option>
+                    <option <?php if( $continent === 'Europe' ) echo 'selected'; ?> value="Europe">Europe</option>
+                    <option <?php if( $continent === 'North America' ) echo 'selected'; ?> value="North America">North America</option>
+                    <option <?php if( $continent === 'Africa' ) echo 'selected'; ?> value="Africa">Africa</option>
+                    <option <?php if( $continent === 'Oceania' ) echo 'selected'; ?> value="Oceania">Oceania</option>
+                    <option <?php if( $continent === 'Anterctica' ) echo 'selected'; ?> value="Anterctica">Anterctica</option>
+                    <option <?php if( $continent === 'South America' ) echo 'selected'; ?> value="South America">SouthAmerica</option>
                 </select>
             </div>
         </div>
@@ -121,10 +126,9 @@ mysqli_close($link);
             <div class="col-sm-10">
                 <div class="input-group">
                     <input type="number" class="form-control" id="surfacearea_min" name="surfacearea_min"
-                        value="<?php echo $indepyear_min; ?>">
+                        value="<?php echo $surfacearea_min; ?>">
                     <span class="input-group-text" id="basic-addon1">～</span>
-                    <input type="number" class="form-control" id="surfacearea_max" name="surfacearea_max"
-                        value="<?php echo $indepyear_max; ?>">
+                    <input type="number" class="form-control" id="surfacearea_max" name="surfacearea_max" value="<?php echo $surfacearea_max; ?>">
                 </div>
             </div>
         </div>
